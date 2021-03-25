@@ -59,5 +59,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fig_Mirror_OneSide_Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 6392795348830962923, guid: 44a77924288490247952577870f99742, type: 3}
+      propertyPath: m_TagString
+      value: blue
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44a77924288490247952577870f99742, type: 3}

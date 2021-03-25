@@ -4,6 +4,6 @@ using UnityEditor;
 public interface IClickable 
 {
 
-    void OnClick();
+    GameObject OnClick();
 
 }

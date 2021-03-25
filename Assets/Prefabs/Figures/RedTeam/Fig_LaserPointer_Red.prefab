@@ -59,5 +59,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fig_LaserPointer_Red
       objectReference: {fileID: 0}
+    - target: {fileID: 4216317996381918708, guid: f6d30fffa99da9d42861aba32cc243dd, type: 3}
+      propertyPath: m_TagString
+      value: red
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6d30fffa99da9d42861aba32cc243dd, type: 3}

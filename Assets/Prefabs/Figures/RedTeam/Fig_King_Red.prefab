@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fig_King_Red
       objectReference: {fileID: 0}
+    - target: {fileID: 2048375342670258985, guid: f8505eb365230a14292eed895fe99110, type: 3}
+      propertyPath: m_TagString
+      value: red
+      objectReference: {fileID: 0}
     - target: {fileID: 7423964241276346557, guid: f8505eb365230a14292eed895fe99110, type: 3}
       propertyPath: m_RootOrder
       value: 0

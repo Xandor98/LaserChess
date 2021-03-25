@@ -200,6 +200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7531972713364400778}
   - component: {fileID: 7204226878195928950}
+  - component: {fileID: -3608276918544589719}
   m_Layer: 6
   m_Name: Fig_Mirror_TwoSide
   m_TagString: Untagged
@@ -237,6 +238,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3608276918544589719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813218962306530524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51aba897e8449144b98b3fd8a5eba121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 7629b62192c6e4e46a02aff8891edb37, type: 2}
 --- !u!1 &4514347804071079484
 GameObject:
   m_ObjectHideFlags: 0

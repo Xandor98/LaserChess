@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class Laser : MonoBehaviour, IClickable
+public class Laser : MonoBehaviour
 {
     public Transform laser_start_pos;
     public float max_reach = 5000;
@@ -94,14 +94,10 @@ public class Laser : MonoBehaviour, IClickable
     IEnumerator DestroyTimer(GameObject to_destroy)
     {
         destroying_started = true;
+        EventManager.UnitKilledTrigger(to_destroy.GetComponent<Figure>());
         yield return new WaitForSecondsRealtime(1);
         Destroy(to_destroy);
         fire = false;
     }
 
-    public void OnClick()
-    {
-        if(!fire)
-            fire = true;
-    }
 }
