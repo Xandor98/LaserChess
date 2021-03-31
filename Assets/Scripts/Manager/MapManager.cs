@@ -26,6 +26,8 @@ public class MapManager : MonoBehaviour
     private Figure[] figures;
     private Tile[] tiles;
 
+    private float x_gap = 1.3f;
+    private float z_gap = 1.3f;
 
     // Start is called before the first frame update
     void Start()
@@ -59,4 +61,14 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public float GetXGap()
+    {
+        return x_gap;
+    }
+
+    public float GetZGap()
+    {
+        return z_gap;
+    }
+    
 }

@@ -9,6 +9,7 @@ public class Figure : MonoBehaviour, IClickable
 
     private Vector3 originPos;
     private Quaternion originRot;
+
     void Start()
     {
 
@@ -55,5 +56,10 @@ public class Figure : MonoBehaviour, IClickable
         {
             transform.Rotate(0.0f, -90.0f, 0.0f, Space.Self);
         }
+    }
+
+    public Vector3 GetOriginPos()
+    {
+        return originPos;
     }
 }

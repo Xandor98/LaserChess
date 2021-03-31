@@ -9,19 +9,14 @@ public class TurnManager : MonoBehaviour
 
     public static TurnManager Instance { get { return _instance; } }
 
-    public float x_tile_gap = 1.3f;
-    public float z_tile_gap = 1.3f;
+    public APlayer[] playerList;
+
+    private TeamColor CurrentPlayer = TeamColor.BLUE;
 
     public enum TeamColor
     {
         BLUE, RED
     }
-
-    private GameObject selected = null;
-    private bool canMakeMove = true;
-    private TeamColor yourColor = TeamColor.BLUE;
-    private bool YourMove = true;
-
 
     private void Awake()
     {
@@ -40,15 +35,38 @@ public class TurnManager : MonoBehaviour
         EventManager.EndOfRoundHandler += EndOFRoundListener;
         EventManager.UnitKilledHandler += UnitKilledListener;
 
-        YourMove = yourColor == TeamColor.BLUE;
+        GameObject[] _gameObjects = GameObject.FindGameObjectsWithTag("Player");
+        if(_gameObjects.Length != 2)
+        {
+            Debug.LogError("Not Enougth Player");
+            //TODO: End game
+        }
+
+        playerList = new APlayer[_gameObjects.Length];
+
+        playerList[0] = _gameObjects[0].GetComponent<APlayer>();
+        playerList[1] = _gameObjects[1].GetComponent<APlayer>();
+
+        playerList[0].MyColor = TeamColor.BLUE;
+        playerList[0].IsTurn = true;
+
+        playerList[1].MyColor = TeamColor.RED;
+        playerList[1].IsTurn = false;
     }
 
     private void EndOFRoundListener()
     {
-        YourMove = !YourMove;
-        canMakeMove = YourMove;
+        MapManager.Instance.FireLaser(CurrentPlayer);
 
-        Debug.Log("Your Move: " + YourMove);
+        switch (CurrentPlayer)
+        {
+            case TeamColor.BLUE:
+                CurrentPlayer = TeamColor.RED;
+                break;
+            case TeamColor.RED:
+                CurrentPlayer = TeamColor.BLUE;
+                break;
+        }
     }
 
     private void UnitKilledListener(Figure figure)
@@ -70,88 +88,25 @@ public class TurnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (YourMove)
+        Move current_Move = null;
+        foreach (APlayer player in playerList)
         {
-            if (Input.GetMouseButtonDown(0) && canMakeMove)
+            if (player.MyColor == CurrentPlayer)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("MouseLayer")))
-                {
-                    if (hit.transform.gameObject.TryGetComponent(out IClickable tmp))
-                    {
-                        if (selected == null && hit.transform.tag == yourColor.ToString().ToLower())
-                        {
-                            FigureConf conf = hit.transform.gameObject.GetComponent<Figure>().config;
-                            if(conf.IsMoveable || conf.IsRotateable)
-                                selected = tmp.OnClick();
-                        }
-                        else if (selected != null && hit.transform.gameObject.TryGetComponent(out Tile tmp_tile))
-                        {
-                            FigureConf conf = selected.GetComponent<Figure>().config;
-                            //if Selected and click on tile
-
-                            int x_t_val = (int)(hit.transform.position.x / x_tile_gap);
-                            int z_t_val = (int)(hit.transform.position.z / z_tile_gap);
-
-                            int x_f_val = (int)(selected.transform.position.x / x_tile_gap);
-                            int z_f_val = (int)(selected.transform.position.z / z_tile_gap);
-
-                            int x_diff = Mathf.Abs(x_t_val - x_f_val);
-                            int z_diff = Mathf.Abs(z_t_val - z_f_val);
-                            
-                            if (conf.IsMoveable && (x_diff > 0 && z_diff > 0))
-                            {
-                                if ((x_diff == 0 && z_diff <= conf.Max_Possible_Moves) ||
-                                (x_diff <= conf.Max_Possible_Moves && z_diff == 0) ||
-                                (x_diff <= conf.Max_Possible_Moves && z_diff <= conf.Max_Possible_Moves))
-                                {
-                                    selected.transform.position = hit.transform.position + new Vector3(0, 1.1f, 0);
-                                    canMakeMove = false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (selected != null && Input.GetButtonDown("Cancel"))
-            {
-                selected.GetComponent<Figure>().UnSelectUnit();
-                selected = null;
-                canMakeMove = true;
-            }
-
-            CheckRotation();
-
-            if (selected == null && Input.GetButtonDown("Submit"))
-            {
-                MapManager.Instance.FireLaser(yourColor);
-                EventManager.EndOfRound();
-            }
-            else if (selected != null && Input.GetButtonDown("Submit"))
-            {
-                selected.transform.position -= new Vector3(0, 1.0f, 0);
-                selected = null;
+                current_Move = player.MakeMove();
             }
         }
-    }
 
-    void CheckRotation()
-    {
-        if(selected != null)
+       //TODO: Verify Move
+
+        if(current_Move != null)
         {
-            bool can_rotate = selected.GetComponent<Figure>().config.IsRotateable;
-            if (can_rotate && Input.GetAxis("Mouse ScrollWheel") > 0)
+            if (current_Move.HasFigure)
             {
-                selected.GetComponent<Figure>().RotateClockwise();
+                current_Move.Figure_To_Move.transform.position = current_Move.Destination;
             }
 
-            if (can_rotate && Input.GetAxis("Mouse ScrollWheel") < 0)
-            {
-                selected.GetComponent<Figure>().RotateCounterClockwise();
-            }
+            EventManager.EndOfRound();
         }
-        
     }
 }

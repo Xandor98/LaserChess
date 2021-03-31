@@ -12,6 +12,9 @@ public class EventManager : MonoBehaviour
     public delegate void EndGame(TurnManager.TeamColor winningColor);
     public static event EndGame EndGameHandler;
 
+    public delegate void MoveFigure(Move move);
+    public static event MoveFigure MoveFigureHandler;
+
     public static void EndOfRound()
     {
         EndOfRoundHandler?.Invoke();
@@ -25,5 +28,10 @@ public class EventManager : MonoBehaviour
     public static void EndGameTrigger(TurnManager.TeamColor winningColor)
     {
         EndGameHandler?.Invoke(winningColor);
+    }
+
+    public static void MoveFigureTrigger(Move move)
+    {
+        MoveFigureHandler?.Invoke(move);
     }
 }
